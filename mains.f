@@ -1,0 +1,43 @@
+C   05/02/90 108060737  MEMBER NAME  USERINCT (S)        M  FORTRAN
+      PROGRAM MAIN
+      IMPLICIT NONE
+
+      DOUBLE PRECISION FUNC
+      EXTERNAL FUNC
+
+      INCLUDE 'hmunit.inc'
+      INCLUDE 'bsfile.inc'
+      INCLUDE 'creslt.inc'
+      INCLUDE 'gujets.inc'
+      INCLUDE 'fvevnt.inc'
+
+      INTEGER NEV,IRET
+
+      INTEGER MXTRY
+      PARAMETER (MXTRY=50)
+
+      CALL BSINIT
+
+      CALL HMSETF('SPRING')
+
+      CALL USERIN
+
+      CALL BSREAD(LUBSF)
+      CLOSE(LUBSF)
+
+      CALL SPINIT
+
+      DO 100 NEV = 1, NOSPEV
+
+         IEVT = NEV
+         CALL SPRING(FUNC,MXTRY)
+         CALL SPEVNT(IRET)
+
+  100 CONTINUE
+
+      CALL SPINFO(LUSTDO)
+
+      CALL SHPLOT(LUSTDO)
+
+      STOP
+      END

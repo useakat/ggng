@@ -1,0 +1,75 @@
+#!/bin/sh -f
+    
+if [ $# -ge 1 ]    
+ then
+  tag="_$1"  
+else
+  tag="_test"
+fi    
+#./spring <<END_OF_DATA
+./spring <<END_OF_DATA 1> log_spring${tag} 2>&1
+C*************************************************
+C Input section for Spring part.
+C*************************************************
+C  HELP =  for PRINT command help
+C  GETB =  (0,other)=(Do BS,Read from FT23)
+C  PUTB =  (0,other)=(No BS,BS to FT23)
+C  DOSP =  (0,1)=(No SP,SP)
+C  PHST =  (0,1)=(No Hist,Hist)
+C  PINF =  (0,1)=(No Print,Print)
+C  PLOG =  (0,1)=(Np Print,Print) BS info
+C  HSTF = histogram file
+C  INF  = input file  for GETB .ne. 0
+C  OUTF = output file for PUTB .ne. 0
+  HELP
+  HSTF uux2a_t${tag}.tdr
+  OUTF uux2a_t${tag}.bases
+  EVTF uux2a_t${tag}.evdata
+C*************************************************
+C Bases Integration Parameters
+C*************************************************
+C  NCAL =  NCALL
+C  ITM1 =  ITMAX1
+C  ITM2 =  ITMAX2
+  NCAL 500000
+  ITM1 5
+  ITM2 5
+C*************************************************
+C Standard Model Parameters
+C*************************************************
+C  ALFI = 1/alpha(m_Z)
+C  ALFS = alpha_s(m_Z)
+C  AMSW = m_W
+C  AMSZ = m_Z
+C  AMSH = m_H
+C  AMST = m_t
+  ALFI 128.9D0
+  ALFS 0.1185D0
+  S2W  0.2312D0
+  AMSW 80.33D0
+  AMSZ 91.188D0
+  AMSH 120.D0
+  AMST 174.30
+C*************************************************
+C SFSF Parameters
+C*************************************************
+C  ECM  = sqrt(s) (GeV)
+C  POLE = electron polarization
+C  SGEB = beam energy spread (fraction)
+C  ISRB = (1,2,3)=(None,ISR,ISR+BM)
+  ECM  2000.D0
+  POLE 0.D0
+  SGEB 0.005D0
+  ISRB 1
+C*************************************************
+C #Events by SPRING
+C*************************************************
+C  NVSP = #events
+  NVSP  10000
+  NVPR  10
+C*************************************************
+C  Detector Simulation
+C*************************************************
+  NRUN 9995
+END
+END_OF_DATA
